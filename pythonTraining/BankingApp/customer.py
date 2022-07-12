@@ -31,7 +31,7 @@ class Customer:
     def deposit(self,amount,bankAbreviation):
         isAccountExits, account =self.findAccount(bankAbreviation)
         if not isAccountExists:
-            return False,"Acount nahi cha"
+            return False,"Acount not Exists"
         account.balance += amount
         self.__updateTotalBalance()
         self.displayBalance()
@@ -39,25 +39,25 @@ class Customer:
     def withdraw(Self, amount, bankAbreviation):
         isAccountExists , account = self.findAccount(bankAbreviation)
         if not isAccountExists:
-            return False,"Acount nahi cha"
+            return False,"Acount not Exists"
         #  check balance is sufficent 
         if not account.isSufficentbalance(amount):
-            return False, "paisa nahi cha"
+            return False, "Low balance"
         account.balance -= amount
         self.__updateTotalBalance()
         self.displayBalance()
-        return  True,"Paisa nekalgaya"
+        return  True,"Money Debited"
 
     def transferAmount(self,creditCustomerUsername, creditBankAbbrivation, debitAbbrivation,amount):
         isCreditCustomerExits, creditCustomer = Customer.findCustomer(creditCustomerUsername)
         if not isCreditCustomerExits:
-            return False, "Samne wale ka account nahi cha"
+            return False, "Crediter account dose not exists"
         self.withdraw()
         creditCustomer.deposit()
         self.deposit()
     def selfTrasfer(self,creditBankAbbrivation,amount,debitAbbrivation):
         self.transferAmount(self.userName,creditBankAbbrivation,debitAbbrivation,amount)
-        return True,"Dal diya bhawa"
+        return True,"Money Debited  "
 
 
     def findAccount(self,bankAbreviation ):
