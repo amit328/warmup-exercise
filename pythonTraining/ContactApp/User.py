@@ -1,69 +1,71 @@
 class User:
     userId = -1
     contacts = []
-    uuid = [] #list of user uuid
     def __init__(self,firstName,lastName,isAdmin,isActive):
         self.firstName = firstName
         self.lastName = lastName
-        self.isAdmin = isAdmin
         self.isActive = isActive
+        self.isAdmin = isAdmin
         User.userId += 1
         self.userId = User.userId
+        self.contacts = User.contacts
+
     @staticmethod
     def checkAdmin(isAdmin):
         if isAdmin == True:
-            return True
-        return False
+            return True, "User have admin rights"
+        return False, " User do not have rights to add other user"
     @staticmethod
-    def userExists(userId):
+    def checkActive(isActive):
+        if isActive == True:
+            return True, "User is Active"
+        return False, " User is not active"
+    @staticmethod
+    def userExists(firstName):
         for i in User.contacts:
-            if i.userId == userId:
+            if i.firstName == firstName:
                 return True,i
-        return False, "User Not Exists"
-    @staticmethod
-    def createUser(firstName, lastName,isAdmin,isActive):
-        checkadmin = User.checkAdmin(isAdmin)
-        if not checkadmin:
-            return False, "Not a admin can not create a user"
-        newUser = User(firstName,lastName,isAdmin,isActive)
-        User.contacts.append(newUser, User.uuid)
-        return True, "user Added"
+        return False,None
+
+    def createUser(firstName,lastName,isAdmin,isActive):
+        checkActiveValue, statementActive = User.checkActive(isActive)
+        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        if checkActiveValue and checkAdminValue ==True :
+            newUser = User(firstName,lastName,isAdmin,isActive)
+            User.contacts.append(newUser)
+        return "You are not Admin and Active User"
+
 
     def deleteUser(firstName):
-        isUserExist, userObject = User.findUserToUpdate(firstName)
-        if isUserExist and User.checkAdmin(userObject.isAdmin):
-            userObject.isActive = False
-            return True, "Deleted User"
-        return False," Cant delete the User"
-    @staticmethod
-    def findUserToUpdate(firstName):
-        for i in User.contacts:
-                if i.firstName == firstName:
-                    return True,i
-        return False, None  
+        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        if not checkAdminValue:
+            return print(statementAdmin)
+        user,objectUser = User.userExists(firstName)
+        if user is None:
+            return print("User not Exists")    
+        user.isActive = False
 
-    def updateUser (firstName, lastName,isAdmin,isActive):
-        isUserExist, userObject = User.findUserToUpdate(firstName)
-        if isUserExist and User.checkAdmin(userObject.isAdmin):
-            userObject.lastName = lastName
-            userObject.isAdmin = isAdmin
-            userObject.isActive = isActive
-            return True, "Updated new value"
-        return False, "Cant update User"
+    def updateUser(newValue,firstName,propertyUser):
+        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        if not checkAdminValue:
+            return print(statementAdmin)
+        user, objectUser = User.userExists(firstName)
+        if user is None:
+            return print("User not Exists")
+        objectUser.propertyUser = newValue
+        return "Value Updated"
+    
+    def readUser(firstName):
+        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        if not checkAdminValue:
+            return print(statementAdmin)
+        user, objectUser = User.userExists(firstName)
+        if user is None:
+            return print("User not Exists")
+        print("First name: ",objectUser.firstName)
+        print("Last Name:" ,objectUser.lastName)
+        print("Admin Status: ",objectUser.isAdmin)
+        print("Active Status: ",objectUser.isActive)
+        print("User Id: ",objectUser.userId)
 
-    @staticmethod
-    def readUser(uuid):
-        for i in User.contacts:
-            if uuid == i.uuid:
-                return True,i
-        return False, "User  doesnot Exits" 
         
-
-
-        
-            
-            
-
-
-
-

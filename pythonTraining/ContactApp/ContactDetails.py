@@ -1,14 +1,20 @@
-from ContactApp import Contact
+from Contact import Contact
+from User import User
+
+
 class ContactDetails:
-    uuid = [] #list of customer uuid
-    def __init__(self,email,phone):
+    contactDetailsId = -1
+    def __init__(self,number,email):
+        self.number = number
         self.email = email
-        self.phone = phone
-    def createContactDetails(email,phone):
-        isContactIsActive, contactStatus = Contact.checkConatctIsActive(ContactDetails.uuid)
-        if isContactIsActive == True:
-            newContactDetails = ContactDetails(email,phone)
-            Contact.contactsDetails.append(newContactDetails)
-            return "Updated"
-        return "Not Updated"
-    """Contact Detils update, delete and read will be done through Contact Page only"""
+        ContactDetails.contactDetailsId +=1
+        self.contactId = ContactDetails.contactDetailsId
+
+    def createContactDetails(number,email,contactFirstName):
+        checkActiveValue, statementActive = User.checkActive(isActive)
+        if checkActiveValue ==True:
+            contact,objectContact = Contact.contactExists(contactFirstName)
+            setattr(objectContact, 'number', number)
+            setattr(objectContact, 'email', email)
+            return "Value Added"
+        return statementActive
