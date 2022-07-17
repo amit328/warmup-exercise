@@ -1,7 +1,9 @@
+from Contact import Contact
 class User:
     userId = -1
     contacts = []
-    def __init__(self,firstName,lastName,isAdmin,isActive):
+    def __init__(self,userName,firstName,lastName,isAdmin,isActive):
+        self.userName =userName
         self.firstName = firstName
         self.lastName = lastName
         self.isActive = isActive
@@ -37,29 +39,73 @@ class User:
 
 
     def deleteUser(firstName):
-        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        user,objectUser = User.userExists(firstName)
+        checkAdminValue, statementAdmin= User.checkAdmin(objectUser.isAdmin)
         if not checkAdminValue:
             return print(statementAdmin)
-        user,objectUser = User.userExists(firstName)
         if user is None:
             return print("User not Exists")    
         user.isActive = False
 
     def updateUser(newValue,firstName,propertyUser):
-        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        user, objectUser = User.userExists(firstName)
+        checkAdminValue, statementAdmin= User.checkAdmin(objectUser.isAdmin)
         if not checkAdminValue:
             return print(statementAdmin)
-        user, objectUser = User.userExists(firstName)
         if user is None:
             return print("User not Exists")
         objectUser.propertyUser = newValue
         return "Value Updated"
+
+    def createContacDetails(contactFirstName,contactLastName,isActive):
+        checkActiveValue, statementActive = User.checkActive(isActive)
+        if checkActiveValue ==True :
+            newConcact = Contact(contactFirstName,contactLastName,isActive)
+            Contact.contactDetails.append(newConcact)
+        return statementActive
+
+    def deleteContact(contactFirstName):
+        contact,objectContact = Contact.contactExists(contactFirstName)
+        checkActiveValue, statementActive = User.checkActive(objectContact.isActive)
+        if not checkActiveValue:
+            return print(statementActive)
+        if contact is None:
+            return print("Contact not Exists") 
+        contact.isActive = False
     
+    def readContact(contactFirstName):
+        contact,objectContact = Contact.contactExists(contactFirstName)
+        checkActiveValue, checkActiveValue = User.checkActive(objectContact.isActive)
+        if not checkActiveValue:
+            return print(checkActiveValue)
+        if contact is None:
+            return print("Contact not Exists")
+        print("First name: ",objectContact.firstName)
+        print("Last Name:" ,objectContact.lastName)
+        print("Admin Status: ",objectContact.isAdmin)
+        print("Active Status: ",objectContact.isActive)
+        print("Contact Id: ",objectContact.contactId)
+        if objectContact.phone:
+            print("Phone Number: ",objectContact.phone)
+        if objectContact.email:
+            print("Email: ",objectContact.email)
+
+
+    def updateContact(newValue,contactFirstName,propertyUser):
+        contact, objectContact = Contact.contactExists(contactFirstName)
+        checkActiveValue, checkActiveValue = User.checkActive(objectContact.isActive)
+        if not checkActiveValue:
+            return print(checkActiveValue)
+        if contact is None:
+            return print("Contact not Exists")
+        setattr(objectContact,propertyUser,newValue )
+        return "Value Updated"
+
     def readUser(firstName):
-        checkAdminValue, statementAdmin= User.checkAdmin(isAdmin)
+        user, objectUser = User.userExists(firstName)
+        checkAdminValue, statementAdmin= User.checkAdmin(objectUser.isAdmin)
         if not checkAdminValue:
             return print(statementAdmin)
-        user, objectUser = User.userExists(firstName)
         if user is None:
             return print("User not Exists")
         print("First name: ",objectUser.firstName)
