@@ -1,0 +1,6 @@
+DRY - done
+kiss - no issues
+
+yagni - no issues
+soc - All code on user.py should keep logic in the respected function
+
