@@ -1,0 +1,9 @@
+Play(index):
+for i in range(9):
+    symbol = getSymbol()
+    self.cells[index].mark = symbol
+    index = input(index)
+
+0 1 2 X O O
+3 4 5 O O X
+6 7 8 X X o
